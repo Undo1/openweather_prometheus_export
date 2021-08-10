@@ -15,7 +15,7 @@ var zipCode, _ = strconv.Atoi(os.Getenv("OWM_ZIP_CODE"))
 
 func main() {
     http.HandleFunc("/", func(respW http.ResponseWriter, r *http.Request) {
-        w, err := owm.NewCurrent("F", "en", apiKey) // fahrenheit (imperial) with Russian output
+        w, err := owm.NewCurrent("F", "en", apiKey)
         if err != nil {
             log.Fatalln(err)
         }
