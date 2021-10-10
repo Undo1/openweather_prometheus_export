@@ -7,7 +7,7 @@ import (
     "os"
     "strconv"
 
-    owm "github.com/briandowns/openweathermap"
+    owm "github.com/3rein/openweathermap"
 )
 
 var apiKey = os.Getenv("OWM_API_KEY")
@@ -15,15 +15,23 @@ var zipCode, _ = strconv.Atoi(os.Getenv("OWM_ZIP_CODE"))
 
 func main() {
     http.HandleFunc("/", func(respW http.ResponseWriter, r *http.Request) {
+        futW, err := owm.NewForecast("5", "F", "en", apiKey)
+        if err != nil {
+            log.Fatalln(err)
+        }
+
         w, err := owm.NewCurrent("F", "en", apiKey)
         if err != nil {
             log.Fatalln(err)
         }
 
         err = w.CurrentByZip(zipCode, "US")
+
         if err != nil {
             log.Fatalln(err)
         }
+
+        err = futW.DailyByZip(zipCode, "US", 5)
 
         temp := w.Main.Temp
         pressure := w.Main.GrndLevel
